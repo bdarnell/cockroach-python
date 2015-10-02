@@ -11,6 +11,10 @@ class Cursor(object):
         self.arraysize = None
         self._result = None
         self._pos = None
+        self.lastrowid = None
+
+    def close(self):
+        pass
 
     @property
     def rowcount(self):

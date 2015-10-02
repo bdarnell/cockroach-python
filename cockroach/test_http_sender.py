@@ -15,6 +15,7 @@ test_response = wire_pb2.Response(
     session=test_session,
 )
 
+
 class HTTPSenderTest(unittest.TestCase):
     def start_server(self, handler):
         self.server = wsgiref.simple_server.make_server('127.0.0.1', 0, handler)

@@ -7,9 +7,10 @@ from .wire_pb2 import Request
 
 
 class Connection(object):
-    def __init__(self, addr, user, database=None, auto_create=False):
-        self._sender = HTTPSender(addr)
-        self._user = user
+    def __init__(self, username, host, port=26257, database=None,
+                 auto_create=False):
+        self._sender = HTTPSender('%s:%d' % (host, port))
+        self._username = username
         self._database = database
         self._closed = False
         self._session = None
@@ -42,7 +43,7 @@ class Connection(object):
     def _send_request(self, stmt, params=None):
         self._check_closed()
 
-        req = Request(user=self._user)
+        req = Request(user=self._username)
         if self._session is not None:
             req.session = self._session
         if params is not None:

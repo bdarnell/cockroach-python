@@ -52,8 +52,23 @@ for k, v in TypeCode.__members__.items():
 
 
 def _python_to_datum(val):
-    if isinstance(val, str):
+    if val is None:
+        return Datum()
+    elif isinstance(val, str):
         return Datum(string_val=val)
+    elif isinstance(val, bool):
+        # Note that bool is a subtype of int, so order matters.
+        return Datum(bool_val=val)
+    elif isinstance(val, int):
+        return Datum(int_val=val)
+    elif isinstance(val, float):
+        return Datum(float_val=val)
+    elif isinstance(val, datetime.datetime):
+        ts = val.timestamp()
+        return Datum(time_val=Datum.Timestamp(
+            sec=int(ts),
+            nsec=int((ts % 1) * 1e9),
+        ))
     else:
         raise TypeError("unsupported type %s" % type(val))
 
@@ -64,6 +79,15 @@ def _datum_to_python(datum):
         return None
     elif which == "string_val":
         return datum.string_val
+    elif which == "int_val":
+        return datum.int_val
+    elif which == "float_val":
+        return datum.float_val
+    elif which == "bool_val":
+        return datum.bool_val
+    elif which == "time_val":
+        return datetime.datetime.fromtimestamp(
+            datum.time_val.sec + datum.time_val.nsec / 1e9)
     else:
         raise TypeError("unsupported type %s" % which)
 

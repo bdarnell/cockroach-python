@@ -12,8 +12,9 @@ class DBAPITest(dbapi20.DatabaseAPI20Test):
         # always clean up after itself.
         # TODO(bdarnell): improve cleanup so we don't need this.
         database = time.strftime("test%y%m%d%H%M%S")
-        self.connect_kw_args = dict(addr="localhost:26257",
-                                    user="root",
+        self.connect_kw_args = dict(host="localhost",
+                                    port=26257,
+                                    username="root",
                                     database=database,
                                     auto_create=True)
         # Patch the table creation statements because we require primary keys.

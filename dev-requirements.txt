@@ -1,2 +1,6 @@
 docker-compose
 tox
+werkzeug
+dbapi-compliance
+sqlalchemy
+nose

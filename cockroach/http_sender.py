@@ -14,7 +14,7 @@ sql_scheme = "http"
 http_retry_options = RetryOptions(backoff=datetime.timedelta(milliseconds=50),
                                   max_backoff=datetime.timedelta(seconds=5),
                                   constant=2,
-                                  max_attempts=0)  # retry indefinitely
+                                  max_attempts=2)  # retry indefinitely
 
 
 class HTTPSender(object):
@@ -44,6 +44,7 @@ class HTTPSender(object):
                 http_resp = self._post(args)
             except Exception:
                 # Assume all errors sending request are retryable.
+                logging.warning("failed to send was %s" % args)
                 logging.warning("failed to send HTTP request", exc_info=True)
                 return RetryStatus.CONTINUE
             else:
